@@ -14,7 +14,11 @@ function [vec_base, matrix_fk] = fk(nLinks, alpha, a, d, theta,delta,vec_tool)
     if nLinks ~= length(delta)
         error('robot model not match');
     end
-
+    
+    alpha = deg2rad(alpha);
+    theta = deg2rad(theta);
+    delta = deg2rad(delta);
+    
     matrix_fk = eye(4);
   
     for i = 1:nLinks

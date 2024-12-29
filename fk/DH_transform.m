@@ -1,6 +1,7 @@
 function T = DH_transform(alpha, a, d, theta,delta)
-    T = [cos(theta+delta), -sin(theta+delta)*cos(alpha), sin(theta+delta)*sin(alpha), a*cos(theta+delta);
-         sin(theta+delta), cos(theta+delta)*cos(alpha), -cos(theta+delta)*sin(alpha), a*sin(theta+delta);
-         0, sin(alpha), cos(alpha), d;
+belta = theta + delta;    
+T = [    cos(belta), -sin(belta), 0, a;
+         sin(belta)*cos(alpha), cos(belta)*cos(alpha), -sin(alpha), -sin(alpha)*d;
+         sin(belta)*sin(alpha), cos(belta)*sin(alpha), cos(alpha), cos(alpha)*d;
          0, 0, 0, 1];
 end
