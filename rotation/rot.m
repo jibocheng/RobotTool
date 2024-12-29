@@ -8,6 +8,7 @@ function [Rotation_Matrix, vec_rot] = rot(axis, theta, vec)
     %   Rotation_Matrix: 3x3 rotation matrix
     %   vec_rot: rotated vector
     
+    theta = deg2rad(theta);
     % Normalize vector input (ensure column vector)
     if size(vec, 1) == 1
         vec = vec'; % Convert row vector to column vector

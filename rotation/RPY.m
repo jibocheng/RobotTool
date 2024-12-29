@@ -1,7 +1,7 @@
 function [rotMatrix,vec_rot] = RPY(seq,x,y,z,vec)
     % Function to calculate rotation matrix and rotated vector using Euler angles
     vec = vec(:); % 确保列向量
-
+    x = deg2rad(x);    y = deg2rad(y);    z = deg2rad(z);
     % Step 1: Compute individual rotation matrices
     [Rx, ~] = rot('X', x, vec);
     [Ry, ~] = rot('Y', y, vec);

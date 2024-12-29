@@ -1,5 +1,6 @@
 function [rotMatrix,vec_rot] = axisAngleRot( rotAxis,theta,vec)
 %AXISANGLEROT rotate around axis about angle
+    theta = deg2rad(theta);
     kx = rotAxis(1) / norm(rotAxis);
     ky = rotAxis(2) / norm(rotAxis);
     kz = rotAxis(3) / norm(rotAxis);
