@@ -1,0 +1,99 @@
+% variables 
+syms alpha0 alpha1 alpha2 alpha3 alpha4 alpha5;
+syms a0 a1 a2 a3 a4 a5;
+syms d1 d2 d3 d4 d5 d5 d6;
+syms c1 s1 c2 s2 c3 s3 c4 s4 c5 s5 c6 s6;
+syms omega1 omega2 omega3 omega4 omega5 omega6;
+% robot matrix and rotation matrix
+T01 = [c1,-s1,0,0;s1,c1,0,0;0,0,1,d1;0,0,0,1];
+T12 = [c2,-s2,0,0;0,0,1,0;-s2,-c2,0,0;0,0,0,1];
+T23 = [c3,-s3,0,a2;s3,c3,0,0;0,0,1,0;0,0,0,1];
+T34 = [c4,-s4,0,a3;s4,c4,0,0;0,0,1,d4;0,0,0,1];
+T45 = [c5,-s5,0,0;0,0,-1,-d5;s5,c5,0,0;0,0,0,1];
+T56 = [c6,-s6,0,0;0,0,1,d6;-s6,-c6,0,0;0,0,0,1];
+R01 = [c1,-s1,0,;s1,c1,0,;0,0,1];
+R12 = [c2,-s2,0,;0,0,1;-s2,-c2,0];
+R23 = [c3,-s3,0;s3,c3,0;0,0,1,];
+R34 = [c4,-s4,0;s4,c4,0;0,0,1];
+R45 = [c5,-s5,0;0,0,-1;s5,c5,0];
+R56 = [c6,-s6,0;0,0,1;-s6,-c6,0];
+
+% coordinate 1
+w11 = [0;0;omega1];
+v11 = 0; 
+
+% coordinate 2
+p12 = [0;0;0];
+w22 = R12 \ w11 + omega2 * [0;0;1];
+v22 = R12 \ (v11 + cross(w11,p12));
+
+% coordinate 3
+p23 = [a2; 0; 0];
+w33 = R23 \ w22 + omega3 * [0;0;1];
+v33 = R23 \ (v22 + cross(w22, p23));
+
+% coordinate 4
+p34 = [a3;0;d4];
+w44 = R34 \ w33 + omega4 * [0;0;1];
+v44 = R34 \ (v33 + cross(w33, p34));
+
+% coordinate5 
+p45 = [0;d5;0];
+w55 = R45 \ w44 + omega5 * [0;0;1];
+v55 = R45 \ (v44 + cross(w44, p45));
+
+
+% coordinate6
+p56 = [0;d6;0];
+w66 = R56 \ w55 + omega6 * [0;0;1];
+v66 = R56 \ (v55 + cross(w55, p56));
+
+% base coordinate:
+R06 = R01 * R12 * R23 * R34 * R45 * R56;
+w06 = R06 * w66;
+v06 = R06 * v66;
+
+% calculate jacobian matrix:
+v0 = [v06; w06];
+omega_matrix = [omega1;omega2;omega3;omega4;omega5;omega6];
+jacobian_v_matrix = v0 * omega_matrix.' / (omega_matrix.' * omega_matrix);
+
+%% verify jacobian matrix
+% ur model: 
+alpha = [0, -90, 0, 0, 90, -90]; 
+a = [0, 0, 425, 392, 0, 0];
+d = [89.2, 0, 0, 109.3, 94.75, 82.5]; 
+theta = [0, -90, 0, 90, 0, 0]; 
+vec_tool = [0; 0; 0];
+joint_value = [0,0,90,0,0,0];
+delta = joint_value - theta;
+[vec_base, matrix_fk] = fk(6, alpha, a, d, theta, delta, vec_tool);
+rot_fk = matrix_fk(1:3,1:3);
+[rx, ry, rz] = rot2rpy(rot_fk);
+vec_base = [vec_base(1:3);rx;ry;rz];
+disp(vec_base);
+[q_start] = ur_ik(alpha, a, d, theta, joint_value,matrix_fk);
+disp(q_start);
+% step 1 scenario: 
+    % first velocity verify
+    % TCP of ur robot move 10s
+    % along x direction with average 3 mm/s
+    % along y direction with average 2 mm/s
+    % along z direction with average 1 mm/s
+    vec_base_final = [vec_base(1) + 3 * 10; vec_base(2) + 2 * 10; vec_base(3) + 1 * 10; rx; ry; rz]; 
+    matrix_fk_final = [rot_fk(1,:),vec_base_final(1);
+                       rot_fk(2,:),vec_base_final(2);
+                       rot_fk(3,:),vec_base_final(3)
+                       0,0,0,1];
+    [q_final] = ur_ik(alpha, a, d, theta, joint_value,matrix_fk_final);
+    
+    disp(q_final);
+    % start point with q [0,0,0,0,0,0]
+    
+    % in 10 s  
+
+
+
+
+
+
