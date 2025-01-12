@@ -23,7 +23,7 @@ function vec = htr2zyx(T)
         Angle(3) = atan2(m(3, 2) / cos(beta), m(3, 3) / cos(beta));
     end
 
-    rx = Angle(1);ry = Angle(2);rz = Anlge(3);
+    rx = Angle(1);ry = Angle(2);rz = Angle(3);
 
     vec = [x;y;z;rx;ry;rz];
 end
