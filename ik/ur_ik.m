@@ -19,15 +19,7 @@ function [q] = ur_ik(alpha,a,d,theta,delta,T06)
     % align joint_value and d
     d1 = d(1); d2_ = d(2); d3_ = d(3);
     d4_ = d(4); d5_ = d(5); d6_ = d(6);
-    
-    joint_value = theta + delta;
-    joint_value_1 = joint_value(1);
-    joint_value_2 = joint_value(2);
-    joint_value_3 = joint_value(3);
-    joint_value_4 = joint_value(4);
-    joint_value_5 = joint_value(5);
-    joint_value_6 = joint_value(6);
-    
+      
     % pose and postion from T06
     nx = T06(1,1); ny = T06(2,1); nz = T06(3,1);
     ox = T06(1,2); oy = T06(2,2); oz = T06(3,2);
@@ -176,11 +168,11 @@ function [q] = ur_ik(alpha,a,d,theta,delta,T06)
     %    T14_cal_1 = inv(T01_1)*T06*inv(T56_1)*inv(T45_1)
     %              = T01_1 \ T06 / T56_1 / T45_1
     % ------------------------------------------------
-    T14_cal_1 = T01_inv_1*T06*T56_inv_1*inv(T45_1);
-    T14_cal_2 = T01_inv_1*T06*T56_inv_2*inv(T45_2);
+    T14_cal_1 = T01_inv_1*T06*T56_inv_1*pinv(T45_1);
+    T14_cal_2 = T01_inv_1*T06*T56_inv_2*pinv(T45_2);
     
-    T14_cal_3 = T01_inv_2*T06*T56_inv_3*inv(T45_3);
-    T14_cal_4 = T01_inv_2*T06*T56_inv_4*inv(T45_4);
+    T14_cal_3 = T01_inv_2*T06*T56_inv_3*pinv(T45_3);
+    T14_cal_4 = T01_inv_2*T06*T56_inv_4*pinv(T45_4);
     
     % ------------------------------------------------
     % 7) 从 T14_cal_i 中提取 px_T14(i), pz_T14(i)
@@ -334,8 +326,6 @@ function [q] = ur_ik(alpha,a,d,theta,delta,T06)
          q1(2), q2(7), q3(7), q4(7), q5(4), q6(4);
          q1(2), q2(8), q3(8), q4(8), q5(4), q6(4);
        ];
-   q = rad2deg(q);
-    
 end
 
 % ------------------------------------------------------

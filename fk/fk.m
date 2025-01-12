@@ -26,7 +26,6 @@ function [vec_base, matrix_fk] = fk(nLinks, alpha, a, d, theta,delta,vec_tool)
         matrix_fk = matrix_fk * T;
     end
 
-    vec_tool = [vec_tool; 1]; 
-    vec_base = matrix_fk * vec_tool; 
+    vec_base = htr2xyz(matrix_fk);
 end
 
