@@ -1,0 +1,70 @@
+clear; 
+clc;  
+global pi;
+pi = 3.1415926;
+
+% assume no force and torque on end of the manipulator!
+f33 = [0;0;0]; n33 = [0;0;0];
+
+% expression 
+% variables need to be used
+syms q1 q2 dq1 dq2 ddq1 ddq2 real;
+syms Ixx1 Ixx2 Iyy1 Iyy2 Izz1 Izz2 real;
+syms L1 L2 m1 m2 real;
+syms g real;
+syms c1 c2 s1 s2 real;
+
+%define inertia
+Ic11 = [Ixx1 0 0; 0 Iyy1 0; 0, 0, Izz1];
+Ic22 = [Ixx2 0 0; 0 Iyy2 0; 0 0 Izz2];
+%define rotation matrix
+R01 = [c1,-s1,0;s1,c1,0;0,0,1];
+R12 = [c2,-s2,0;s2,c2,0;0,0,1];
+R23 = [1,0,0;0,1,0;0,0,1];
+R32 = R23'; R21 = R12'; R10 = R01';
+%define length parameters:
+P01 = [0;0;0]; P12 = [L1;0;0]; P23 = [L2;0;0];
+Pc11 = [L1/2;0;0]; Pc22 = [L2/2;0;0];
+Z00 = [0;0;1]; Z11 = [0;0;1]; Z22 = [0;0;1];
+% from inner to outer 0->2
+% coordinate 0
+w00 = [0;0;0]; dw00 = [0;0;0]; v00 = [0;0;0]; dv00 = [0;g;0];
+% coordinate 1 velocity
+w11 = R10 * w00 + dq1 * Z11;
+dw11 = R10 * dw00 + cross(R10 * w00,dq1 * Z11) + ddq1*Z11;
+dv11 = R10 *(cross(dw00,P01) + cross(w00,cross(w00,P01)) + dv00);
+dvc11 = cross(dw11,Pc11) + cross(w11,cross(w11,Pc11)) + dv11;
+% coordinate 1 force and torque
+F11 = m1 * dvc11;
+N11 = Ic11 * dw11 + cross(w11, Ic11 * w11);
+% coordinate 2 velocity
+w22 = R21 * w11 + dq2 * Z22;
+dw22 = R21 * dw11 + cross(R21 * w11,dq2 * Z22) + ddq2*Z22;
+dv22 = R21 * ((cross(dw11,P12) + cross(w11,(cross(w11,P12))) + dv11));
+dvc22 = cross(dw22,Pc22) + cross(w22,cross(w22,Pc22)) + dv22;
+% coordinate 2 force and torque
+F22 = m2 * dvc22;
+N22 = Ic22 * dw22 + cross(w22, Ic22 * w22);
+% outer -> inner
+% force and torque 2
+f22 = R23 * f33 + F22;
+n22 = N22 + R23 * n33 + cross(Pc22,F22) + cross(P23,R23*f33);
+% force and torque 1
+f11 = R12 * f22 + F11;
+n11 = N11 + R12 * n22 + cross(Pc11,F11) + cross(P12,R12*f22);
+% tao
+tao1 = n11(3); tao2 = n22(3);
+tao_express = [tao1;tao2];
+% result:
+Izz1_value = 0.208; 
+Izz2_value = 0;
+dq1_value = 0; dq2_value = 0;
+ddq1_value = 0.0; ddq2_value = 0.0;
+s1_value = 0.0; c1_value = 1.0; s2_value= 0.0; c2_value = 1.0;
+m1_value = 2.409; m2_value = 1.0;
+L1_value = 1.0; L2_value = 2.0;
+g_value = -9.81;
+tao_numeric = subs(tao_express, [Izz1, Izz2,dq1, dq2,ddq1,ddq2,s1, c1, s2, c2,m1, m2, L1, L2, g],[Izz1_value, Izz2_value,dq1_value, dq2_value,ddq1_value,ddq2_value,s1_value, c1_value, s2_value, c2_value,m1_value, m2_value, L1_value, L2_value, g_value]);
+
+
+

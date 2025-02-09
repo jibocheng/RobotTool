@@ -1,0 +1,31 @@
+clear;
+clc;
+
+global Ts pi g m1 m2 Izz1 Izz2 L1 L2;
+Ts = 0.01;
+pi = 3.1415926;
+g = 9.81;
+
+Izz1 = 0.208;
+Izz2 = 1.0;
+
+m1 = 2.409;
+m2 = 1.0;
+L1 = 1.0;
+L2 = 2.0;
+
+total_time = 10.0;
+i = 1;
+t = t:Ts:total_time;
+
+pos1 = 0.4*sin(t)*180.0/pi; vel1 = 0.4*cos(t)*180/pi; acc1 = -0.4*sin(t)*180/pi;
+pos2 = 1.2*pos1; vel2 = 1.2*vel1; acc2 = 1.2*acc2;
+
+
+
+
+
+
+
+
+
