@@ -3,8 +3,8 @@ function [tao1, tao2] = twolinkT2_tao_cal(q11,dq1,ddq1,q22,dq2,ddq2)
     global g m1 m2 Ic11 Ic22 P01 P12 P23 Pc11 Pc22;
     % prepare rotation matrix
     R01 = hrotZ3x3(q11); R10 = R01';
-    R12 = hrotZ3x3(q22); R21 = R12';
-    R23 = hrotX3x3(-pi/2); R32 = R23';
+    R12 = hrotX3x3(-pi/2)*hrotZ3x3(q22); R21 = R12';
+    R23 = hrotX3x3(pi/2); R32 = R23';
     
     % from inner to out 0->2:
     w00 = [0;0;0]; dw00 = [0;0;0]; dv00 = [0;0;g];

@@ -36,5 +36,5 @@ t = 0:Ts:total_time;
 pos1 = 0.8*sin(t)*180.0/pi; vel1 = 0.8*sin(t+pi/2)*180.0/pi; acc1 = 0.8*sin(t+pi)*180.0/pi;
 pos2 = 1.2*pos1; vel2 = 1.2*vel1; acc2 = 1.2*acc1;
 
-q1 = [t',pos1']; dq1 = [t',vel1']; ddq1 = [t',acc1'];
-q2 = [t',pos2']; dq2 = [t',vel2']; ddq2 = [t',acc2'];
+q1 = [t',deg2rad(pos1)']; dq1 = [t',deg2rad(vel1)']; ddq1 = [t',deg2rad(acc1)'];
+q2 = [t',deg2rad(pos2)']; dq2 = [t',deg2rad(vel2)']; ddq2 = [t',deg2rad(acc2)'];
