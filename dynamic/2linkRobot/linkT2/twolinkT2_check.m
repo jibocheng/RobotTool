@@ -5,12 +5,13 @@ tao1 = linspace(0,0,sum);
 tao2 = linspace(0,0,sum);
 
 for i = 1:sum
-    q_1 = deg2rad(q1(i,2)); q_2 = deg2rad(q2(i,2));
-    dq_1 = deg2rad(dq1(i,2)); dq_2 = deg2rad(dq2(i,2));
-    ddq_1 = deg2rad(ddq1(i,2));ddq_2 = deg2rad(ddq2(i,2));
+    q_1 = q1(i,2); q_2 = q2(i,2);
+    dq_1 = dq1(i,2); dq_2 = dq2(i,2);
+    ddq_1 = ddq1(i,2);ddq_2 = ddq2(i,2);
     
     %[tao1(i),tao2(i)] = twolinkT2_tao_cal(q_1,dq_1,ddq_1,q_2,dq_2,ddq_2);
-    [tao1(i),tao2(i)] = twolinkT2_tao_linear_seprate_cal(q_1,dq_1,ddq_1,q_2,dq_2,ddq_2);
+    %[tao1(i),tao2(i)] = twolinkT2_tao_linear_seprate_cal(q_1,dq_1,ddq_1,q_2,dq_2,ddq_2);
+    [tao1(i), tao2(i)] = two_link_lagrange_forward(q_1, dq_1, ddq_1, q_2, dq_2, ddq_2);
 end
 figure;
 subplot(4,1,1);

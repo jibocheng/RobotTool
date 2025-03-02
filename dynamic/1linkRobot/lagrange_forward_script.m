@@ -23,8 +23,7 @@ k1_rot = 0.5 * w11.' * R01_Ic11_R01T * w11;
 k1 = simplify(k1_trans + k1_rot);
 
 
-u = m1 * g * Pc01(3); 
-
+u = -m1 * g * Pc01(3); 
 
 L = k1 - u;
 

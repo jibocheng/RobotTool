@@ -7,7 +7,7 @@ function [tao1, tao2] = twolinkT2_tao_cal(q11,dq1,ddq1,q22,dq2,ddq2)
     R23 = hrotX3x3(pi/2); R32 = R23';
     
     % from inner to out 0->2:
-    w00 = [0;0;0]; dw00 = [0;0;0]; dv00 = [0;0;g];
+    w00 = [0;0;0]; dw00 = [0;0;0]; dv00 = [0;0;-g];
     Zv = [0;0;1];
     % motion1
     w11 = R10*w00 + dq1*Zv;
