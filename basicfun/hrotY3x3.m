@@ -1,11 +1,17 @@
-function rot = hrotY3x3( a )
-    c = cos(a);
-    s = sin(a);
-    rot = [
-           c, 0, s;
-           0, 1, 0;
-           -s, 0, c;
-           ];
+function x = hrotY3x3( a )
+    x = eye(3);
+
+    x(1,1) = cos(a);    x(1,2) = 0.0;                x(1,3) = sin(a);   
+    x(2,1) = 0.0;       x(2,2) = 1.0;                x(2,3) = 0.0;               
+    x(3,1) = -sin(a);   x(3,2) = 0.0;                x(3,3) = cos(a);   
+
+    for i = 1:3
+        for j = 1:3
+            if abs(x(i,j))<eps
+                x(i,j) = 0.0;
+            end
+        end
+    end
 
 
 end
